@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Monitor, Settings, Database } from 'lucide-react'
+import { Monitor, Settings, Database, CheckCircle, User } from 'lucide-react'
 import './App.css'
 
 function FadeInSection({ children, delay = 0 }) {
@@ -24,6 +24,104 @@ function FadeInSection({ children, delay = 0 }) {
       ref={domRef}
     >
       {children}
+    </div>
+  );
+}
+
+function VerticalArchitectureVisualizer() {
+  return (
+    <div className="vertical-arch-wrapper">
+      {/* Floating Ambient Badges mapped outside the rotation perspective */}
+      <div className="tech-badge badge-csharp float-slow">C#</div>
+      <div className="tech-badge badge-react float-med">React</div>
+      <div className="tech-badge badge-sql float-fast">.NET</div>
+      <div className="tech-badge badge-api float-slow">SQL Server</div>
+
+      <div className="vertical-arch-container">
+
+        <div className="v-card-wrapper float-slow">
+          <div className="v-card">
+            <div className="v-card-content">
+              <div className="v-card-header">
+                <User className="v-icon" size={20} />
+                <span className="sora-title v-title">Client Node</span>
+              </div>
+              <div className="v-card-details">
+                <span className="v-tag">Browser</span>
+                <span className="v-tag">Mobile UI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="v-trace"></div>
+
+        <div className="v-card-wrapper float-med">
+          <div className="v-card">
+            <div className="v-card-content">
+              <div className="v-card-header">
+                <Monitor className="v-icon" size={20} />
+                <span className="sora-title v-title">React UI</span>
+              </div>
+              <div className="v-card-details">
+                <span className="v-tag">Tailwind</span>
+                <span className="v-tag">Framer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="v-trace"></div>
+
+        <div className="v-card-wrapper float-fast">
+          <div className="v-card">
+            <div className="v-card-content">
+              <div className="v-card-header">
+                <Settings className="v-icon" size={20} />
+                <span className="sora-title v-title">REST API</span>
+              </div>
+              <div className="v-card-details">
+                <span className="v-tag">.NET Core</span>
+                <span className="v-tag">C# Logic</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="v-trace"></div>
+
+        <div className="v-card-wrapper float-slow">
+          <div className="v-card">
+            <div className="v-card-content">
+              <div className="v-card-header">
+                <Database className="v-icon" size={20} />
+                <span className="sora-title v-title">SQL Server</span>
+              </div>
+              <div className="v-card-details">
+                <span className="v-tag">EF Core</span>
+                <span className="v-tag">T-SQL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="v-trace no-pulse"></div>
+
+        <div className="v-card-wrapper float-med">
+          <div className="v-card">
+            <div className="v-card-content">
+              <div className="v-card-header">
+                <CheckCircle className="v-icon v-icon-gold" size={20} />
+                <span className="sora-title v-title gold-text-sm">Output</span>
+              </div>
+              <div className="v-card-details">
+                <span className="v-tag">Reports</span>
+                <span className="v-tag">Analytics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -69,78 +167,24 @@ function App() {
                 <span className="pulse-dot"></span> Available for Work
               </div>
               <h1 className="hero-title animate-fade-in-up delay-100">
-                Building <span className="text-gradient">Business Software</span><br /> That Solves Real Problems
+                <span className="hero-muted">Building</span> <span className="text-gradient">Business Software</span><br /> <span className="hero-muted">That Solves Real Problems</span>
               </h1>
-              <div className="identity-badge glass-panel animate-fade-in-up delay-200">
-                <span className="highlight-text">3+ Years Experience</span>
-                <span className="divider">|</span>
-                <span className="highlight-text">200+ Windows Forms</span>
-                <span className="divider">|</span>
-                <span className="highlight-text">SQL Server Specialist</span>
+              <div className="identity-badge float-slow animate-fade-in-up delay-200">
+                <span className="highlight-text">3+ Years</span>
+                <span className="divider"></span>
+                <span className="highlight-text">200+ Forms</span>
+                <span className="divider"></span>
+                <span className="highlight-text">SQL Specialist</span>
               </div>
               <div className="hero-buttons animate-fade-in-up delay-300">
-                <a href="#projects" className="btn btn-primary magnetic-btn">View Projects</a>
-                <a href="#contact" className="btn btn-secondary glass-btn">Contact Me</a>
+                <a href="#projects" className="btn solid-glow-btn">View Projects</a>
+                <a href="#contact" className="btn ghost-btn">Contact Me</a>
               </div>
             </div>
 
             {/* Right Column: Premium Visual Architecture Layout */}
             <div className="hero-visual-column animate-slide-in-right delay-400">
-              <div className="architecture-wrapper">
-                {/* Floating Ambient Badges */}
-                <div className="tech-badge badge-csharp float-slow">C#</div>
-                <div className="tech-badge badge-react float-med">React</div>
-                <div className="tech-badge badge-sql float-fast">SQL Server</div>
-                <div className="tech-badge badge-api float-slow">REST API</div>
-
-                {/* Main Glowing Container */}
-                <div className="architecture-container hover-container-glow">
-
-                  {/* Node 1 */}
-                  <div className="arch-node double-border">
-                    <div className="node-icon"><Monitor size={24} className="lucide-glow" /></div>
-                    <div className="node-info">
-                      <h4 className="sora-title">User Interface</h4>
-                      <div className="neon-pill-container">
-                        <span className="neon-pill">React</span><span className="neon-pill">UI</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flow Arrow */}
-                  <div className="arch-connection active-glow-path">
-                    <div className="data-pulse"></div>
-                  </div>
-
-                  {/* Node 2 */}
-                  <div className="arch-node double-border">
-                    <div className="node-icon"><Settings size={24} className="lucide-glow" /></div>
-                    <div className="node-info">
-                      <h4 className="sora-title">Business Logic</h4>
-                      <div className="neon-pill-container">
-                        <span className="neon-pill">.NET</span><span className="neon-pill">Node.js</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Flow Arrow */}
-                  <div className="arch-connection active-glow-path">
-                    <div className="data-pulse"></div>
-                  </div>
-
-                  {/* Node 3 */}
-                  <div className="arch-node double-border">
-                    <div className="node-icon"><Database size={24} className="lucide-glow" /></div>
-                    <div className="node-info">
-                      <h4 className="sora-title">Data Layer</h4>
-                      <div className="neon-pill-container">
-                        <span className="neon-pill">SQL Server</span>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
+              <VerticalArchitectureVisualizer />
             </div>
 
           </div>
@@ -151,7 +195,7 @@ function App() {
         <FadeInSection>
           <div className="about-content">
             <div className="about-text">
-              <h2 className="section-title">About Me</h2>
+              <h2 className="section-title">Developer Profile</h2>
               <p>
                 I develop scalable business software solutions with strong expertise in <span className="highlight">C#</span>, <span className="highlight">.NET Framework</span>, <span className="highlight">SQL Server</span> and API integration.
               </p>
