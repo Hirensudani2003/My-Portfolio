@@ -213,6 +213,11 @@ function App() {
         </div>
       </nav>
 
+      {/* Mobile Menu Backdrop */}
+      {isMenuOpen && (
+        <div className="nav-backdrop" onClick={() => setIsMenuOpen(false)}></div>
+      )}
+
       {/* Global Background Engine */}
       <div className="global-background">
         <div className="grid-overlay"></div>
