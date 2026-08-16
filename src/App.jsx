@@ -1,5 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
-import { Monitor, Settings, Database, CheckCircle, User } from 'lucide-react'
+import {
+  Monitor,
+  Settings,
+  Database,
+  CheckCircle,
+  User,
+  Download,
+  Server,
+  Layout,
+  Wrench,
+  Phone,
+  Mail,
+  MapPin,
+  Linkedin,
+  Copy,
+  Check,
+  Send
+} from 'lucide-react'
 import './App.css'
 
 function FadeInSection({ children, delay = 0 }) {
@@ -55,7 +72,7 @@ function VerticalArchitectureVisualizer() {
         </div>
 
         <div className="v-trace"></div>
-
+    
         <div className="v-card-wrapper float-med">
           <div className="v-card">
             <div className="v-card-content">
@@ -128,9 +145,46 @@ function VerticalArchitectureVisualizer() {
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [copiedKey, setCopiedKey] = useState(null);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const copyToClipboard = (text, key) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setToastMessage(`Copied to clipboard: ${text}`);
+    setTimeout(() => {
+      setCopiedKey(null);
+      setToastMessage('');
+    }, 2500);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) return;
+    
+    // Construct mailto link
+    const mailtoUrl = `mailto:hirensudani690@gmail.com?subject=Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nFrom: ' + formData.name + ' (' + formData.email + ')')}`;
+    window.location.href = mailtoUrl;
+    
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormData({ name: '', email: '', message: '' });
+      setFormSubmitted(false);
+    }, 4000);
+  };
 
   return (
     <div className="main">
+
+      {/* Floating Toast Notification */}
+      {toastMessage && (
+        <div className="floating-toast">
+          <Check size={16} className="toast-icon" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       <nav className={`navbar glass-nav ${isMenuOpen ? 'menu-open' : ''}`}>
         <h2 className="logo-text">Hiren Sudani</h2>
@@ -146,6 +200,16 @@ function App() {
           <a href="#skills" onClick={() => setIsMenuOpen(false)}>Skills</a>
           <a href="#projects" onClick={() => setIsMenuOpen(false)}>Projects</a>
           <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+          <a
+            href="/Hiren_Sudani_Resume.pdf"
+            download="Hiren_Sudani_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nav-resume-btn"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <Download size={14} /> Resume
+          </a>
         </div>
       </nav>
 
@@ -169,14 +233,26 @@ function App() {
               <h1 className="hero-title animate-fade-in-up delay-100">
                 <span className="hero-muted">Building</span> <span className="text-gradient">Business Software</span><br /> <span className="hero-muted">That Solves Real Problems</span>
               </h1>
-              <div className="identity-badge float-slow animate-fade-in-up delay-200">
+              <p className="hero-subtitle animate-fade-in-up delay-200">
+                Crafting enterprise-grade applications with clean architecture, fast UX and reliable SQL automation for real business needs.
+              </p>
+              <div className="identity-badge float-slow animate-fade-in-up delay-300">
                 <span className="highlight-text">3+ Years</span>
                 <span className="divider"></span>
                 <span className="highlight-text">200+ Forms</span>
                 <span className="divider"></span>
                 <span className="highlight-text">SQL Specialist</span>
               </div>
-              <div className="hero-buttons animate-fade-in-up delay-300">
+              <div className="hero-buttons animate-fade-in-up delay-400">
+                <a
+                  href="/Hiren_Sudani_Resume.pdf"
+                  download="Hiren_Sudani_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn resume-glow-btn"
+                >
+                  <Download size={18} className="btn-icon" /> Download Resume
+                </a>
                 <a href="#projects" className="btn solid-glow-btn">View Projects</a>
                 <a href="#contact" className="btn ghost-btn">Contact Me</a>
               </div>
@@ -205,14 +281,100 @@ function App() {
             </div>
             <div className="about-visual">
               <div className="tech-grid-container">
-                <div className="tech-tag glow-cyan">C#</div>
-                <div className="tech-tag glow-cyan">.NET</div>
+                <div className="tech-tag glow-cyan">C# .NET</div>
                 <div className="tech-tag glow-cyan">SQL Server</div>
+                <div className="tech-tag glow-cyan">REST APIs</div>
                 <div className="tech-tag glow-cyan">React.js</div>
                 <div className="tech-tag glow-cyan">WinForms</div>
-                <div className="tech-tag glow-cyan">REST APIs</div>
+                <div className="tech-tag glow-cyan">EF Core</div>
               </div>
             </div>
+          </div>
+        </FadeInSection>
+      </section>
+
+      {/* Categorized Tech Skills Section */}
+      <section id="skills" className="section skills-section">
+        <FadeInSection>
+          <h2 className="section-title">Technical Expertise</h2>
+          <p className="skills-subtitle">
+            Core technologies and tools I utilize to engineer mission-critical enterprise systems.
+          </p>
+
+          <div className="skills-grid">
+            
+            {/* Backend Card */}
+            <div className="skill-card glass-panel tilt-card">
+              <div className="skill-card-header">
+                <div className="skill-icon-wrap glow-purple">
+                  <Server size={24} />
+                </div>
+                <h3>Backend & APIs</h3>
+              </div>
+              <div className="skill-tags-group">
+                <span className="skill-pill">C#</span>
+                <span className="skill-pill">.NET Core / 8</span>
+                <span className="skill-pill">ASP.NET Web API</span>
+                <span className="skill-pill">Entity Framework Core</span>
+                <span className="skill-pill">LINQ</span>
+                <span className="skill-pill">Microservices</span>
+              </div>
+            </div>
+
+            {/* Database Card */}
+            <div className="skill-card glass-panel tilt-card">
+              <div className="skill-card-header">
+                <div className="skill-icon-wrap glow-cyan">
+                  <Database size={24} />
+                </div>
+                <h3>Database & SQL</h3>
+              </div>
+              <div className="skill-tags-group">
+                <span className="skill-pill">SQL Server</span>
+                <span className="skill-pill">T-SQL</span>
+                <span className="skill-pill">Stored Procedures</span>
+                <span className="skill-pill">Query Optimization</span>
+                <span className="skill-pill">Index Tuning</span>
+                <span className="skill-pill">Schema Design</span>
+              </div>
+            </div>
+
+            {/* Frontend & Desktop Card */}
+            <div className="skill-card glass-panel tilt-card">
+              <div className="skill-card-header">
+                <div className="skill-icon-wrap glow-blue">
+                  <Layout size={24} />
+                </div>
+                <h3>Frontend & Desktop</h3>
+              </div>
+              <div className="skill-tags-group">
+                <span className="skill-pill">React.js</span>
+                <span className="skill-pill">JavaScript (ES6+)</span>
+                <span className="skill-pill">WinForms</span>
+                <span className="skill-pill">HTML5 / CSS3</span>
+                <span className="skill-pill">Responsive UI</span>
+                <span className="skill-pill">Tailwind CSS</span>
+              </div>
+            </div>
+
+            {/* Tools & Workflow Card */}
+            <div className="skill-card glass-panel tilt-card">
+              <div className="skill-card-header">
+                <div className="skill-icon-wrap glow-amber">
+                  <Wrench size={24} />
+                </div>
+                <h3>Tools & Environment</h3>
+              </div>
+              <div className="skill-tags-group">
+                <span className="skill-pill">Visual Studio</span>
+                <span className="skill-pill">SQL Server Mgmt (SSMS)</span>
+                <span className="skill-pill">Git & GitHub</span>
+                <span className="skill-pill">Postman</span>
+                <span className="skill-pill">IIS Server</span>
+                <span className="skill-pill">Debugging & Profiling</span>
+              </div>
+            </div>
+
           </div>
         </FadeInSection>
       </section>
@@ -278,7 +440,7 @@ function App() {
 
       <section id="projects" className="section">
         <FadeInSection>
-          <h2 className="section-title">Projects</h2>
+          <h2 className="section-title">Featured Enterprise Projects</h2>
           <div className="projects-grid projects-asym relative-container">
             {/* Gradient Connecting to Impact */}
             <div className="vertical-gradient-line hidden-mobile"></div>
@@ -288,16 +450,20 @@ function App() {
                 <span className="mac-dot red"></span>
                 <span className="mac-dot yellow"></span>
                 <span className="mac-dot green"></span>
+                <span className="project-system-badge">Enterprise Production System</span>
               </div>
               <div className="project-body">
                 <h3>Diamond Inventory Management</h3>
-                <p>Large-scale product-based solution for diamond stock tracking, order management and reporting.</p>
+                <p>Large-scale product-based solution for diamond stock tracking, multi-location inventory, order workflows, and real-time analytical reporting.</p>
                 <div className="tech-capsules">
                   <span className="capsule">C#</span>
                   <span className="capsule">SQL Server</span>
                   <span className="capsule">.NET</span>
+                  <span className="capsule">Stored Procedures</span>
                 </div>
-                <a href="#" className="btn-project magnetic mouse-gradient">View Project</a>
+                <div className="project-meta-pill">
+                  ⚡ Live Production Environment
+                </div>
               </div>
             </div>
 
@@ -306,16 +472,20 @@ function App() {
                 <span className="mac-dot red"></span>
                 <span className="mac-dot yellow"></span>
                 <span className="mac-dot green"></span>
+                <span className="project-system-badge">Enterprise Production System</span>
               </div>
               <div className="project-body">
                 <h3>Textile Management Software</h3>
-                <p>Automated textile inventory and billing software using C# and SQL Server.</p>
+                <p>Automated textile manufacturing, inventory ledger, batch tracking, and invoice billing software powered by C# and high-performance SQL Server.</p>
                 <div className="tech-capsules">
                   <span className="capsule">C#</span>
                   <span className="capsule">WinForms</span>
                   <span className="capsule">SQL Server</span>
+                  <span className="capsule">Fast UX</span>
                 </div>
-                <a href="#" className="btn-project magnetic mouse-gradient">View Project</a>
+                <div className="project-meta-pill">
+                  ⚡ Live Production Environment
+                </div>
               </div>
             </div>
           </div>
@@ -348,20 +518,152 @@ function App() {
         </FadeInSection>
       </section>
 
-      <section id="contact" className="section">
+      {/* Upgraded Contact Section */}
+      <section id="contact" className="section contact-section">
         <FadeInSection>
-          <h2 className="section-title">Contact</h2>
-          <div className="contact-card glass-panel">
-            <p><span>📞</span> 9537162540</p>
-            <p><span>📧</span> hirensudani690@gmail.com</p>
-            <p><span>📍</span> Surat, India</p>
-            <p><span>🔗</span> <a href="https://linkedin.com/in/hirensudani" style={{ color: 'inherit', textDecoration: 'none' }}>LinkedIn Profile</a></p>
+          <h2 className="section-title">Get In Touch</h2>
+          <p className="contact-subtitle">
+            Let's discuss how I can contribute to your software architecture or enterprise development needs.
+          </p>
+
+          <div className="contact-container">
+            
+            {/* Left Column: Quick Info Cards */}
+            <div className="contact-info-column">
+              
+              {/* Phone Card */}
+              <div className="contact-info-card glass-panel">
+                <div className="info-icon-box">
+                  <Phone size={20} />
+                </div>
+                <div className="info-details">
+                  <span className="info-label">Phone Number</span>
+                  <a href="tel:+919537162540" className="info-value">+91 9537162540</a>
+                </div>
+                <button
+                  type="button"
+                  className="copy-btn"
+                  onClick={() => copyToClipboard('+919537162540', 'phone')}
+                  title="Copy Phone Number"
+                >
+                  {copiedKey === 'phone' ? <Check size={16} className="text-green" /> : <Copy size={16} />}
+                </button>
+              </div>
+
+              {/* Email Card */}
+              <div className="contact-info-card glass-panel">
+                <div className="info-icon-box">
+                  <Mail size={20} />
+                </div>
+                <div className="info-details">
+                  <span className="info-label">Email Address</span>
+                  <a href="mailto:hirensudani690@gmail.com" className="info-value">hirensudani690@gmail.com</a>
+                </div>
+                <button
+                  type="button"
+                  className="copy-btn"
+                  onClick={() => copyToClipboard('hirensudani690@gmail.com', 'email')}
+                  title="Copy Email Address"
+                >
+                  {copiedKey === 'email' ? <Check size={16} className="text-green" /> : <Copy size={16} />}
+                </button>
+              </div>
+
+              {/* Location Card */}
+              <div className="contact-info-card glass-panel">
+                <div className="info-icon-box">
+                  <MapPin size={20} />
+                </div>
+                <div className="info-details">
+                  <span className="info-label">Location</span>
+                  <span className="info-value">Surat, Gujarat, India</span>
+                </div>
+              </div>
+
+              {/* LinkedIn Card */}
+              <div className="contact-info-card glass-panel">
+                <div className="info-icon-box">
+                  <Linkedin size={20} />
+                </div>
+                <div className="info-details">
+                  <span className="info-label">LinkedIn Profile</span>
+                  <a
+                    href="https://www.linkedin.com/in/hiren-sudani-148a9023b"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="info-value link-highlight"
+                  >
+                    linkedin.com/in/hiren-sudani-148a9023b
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column: Direct Message Form */}
+            <div className="contact-form-column">
+              <form onSubmit={handleFormSubmit} className="contact-form glass-panel">
+                <h3 className="form-title">Send a Direct Message</h3>
+
+                {formSubmitted && (
+                  <div className="form-success-banner">
+                    <CheckCircle size={18} /> Opening your email app to send the message...
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label htmlFor="name">Your Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    required
+                    placeholder="e.g. John Doe"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Your Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    required
+                    placeholder="john@company.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="message">Message</label>
+                  <textarea
+                    id="message"
+                    required
+                    rows="4"
+                    placeholder="Let's build something together..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <button type="submit" className="btn solid-glow-btn form-submit-btn">
+                  <Send size={16} /> Send Message
+                </button>
+              </form>
+            </div>
+
           </div>
         </FadeInSection>
       </section>
 
+      {/* Footer */}
+      <footer className="footer">
+        <p>© {new Date().getFullYear()} Hiren Sudani. All rights reserved.</p>
+      </footer>
+
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
