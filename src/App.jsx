@@ -15,7 +15,9 @@ import {
   Linkedin,
   Copy,
   Check,
-  Send
+  Send,
+  Loader2,
+  AlertCircle
 } from 'lucide-react'
 import './App.css'
 
@@ -148,7 +150,8 @@ function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [copiedKey, setCopiedKey] = useState(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState(null);
 
   const copyToClipboard = (text, key) => {
     navigator.clipboard.writeText(text);
@@ -160,19 +163,54 @@ function App() {
     }, 2500);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
     
-    // Construct mailto link
-    const mailtoUrl = `mailto:hirensudani690@gmail.com?subject=Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message + '\n\nFrom: ' + formData.name + ' (' + formData.email + ')')}`;
-    window.location.href = mailtoUrl;
-    
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: '', email: '', message: '' });
-      setFormSubmitted(false);
-    }, 4000);
+    setIsSubmitting(true);
+    setFormStatus(null);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: '9e1dd0ca-2f50-4710-8f2e-c82a9eecc711',
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: `Portfolio Inquiry from ${formData.name}`,
+          from_name: 'Hiren Sudani Portfolio',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setFormStatus({
+          type: 'success',
+          text: 'Thank you! Your message has been sent directly to Hiren\'s email inbox.',
+        });
+        setFormData({ name: '', email: '', message: '' });
+        setToastMessage('Message sent to Hiren! ✓');
+        setTimeout(() => setToastMessage(''), 3500);
+      } else {
+        setFormStatus({
+          type: 'error',
+          text: result.message || 'Something went wrong. Please try again or email directly.',
+        });
+      }
+    } catch {
+      setFormStatus({
+        type: 'error',
+        text: 'Network error. Please check your internet connection or email directly.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -610,9 +648,10 @@ function App() {
               <form onSubmit={handleFormSubmit} className="contact-form glass-panel">
                 <h3 className="form-title">Send a Direct Message</h3>
 
-                {formSubmitted && (
-                  <div className="form-success-banner">
-                    <CheckCircle size={18} /> Opening your email app to send the message...
+                {formStatus && (
+                  <div className={formStatus.type === 'success' ? 'form-success-banner' : 'form-error-banner'}>
+                    {formStatus.type === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+                    <span>{formStatus.text}</span>
                   </div>
                 )}
 
@@ -625,6 +664,7 @@ function App() {
                     placeholder="e.g. John Doe"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -637,6 +677,7 @@ function App() {
                     placeholder="john@company.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -649,11 +690,24 @@ function App() {
                     placeholder="Let's build something together..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    disabled={isSubmitting}
                   ></textarea>
                 </div>
 
-                <button type="submit" className="btn solid-glow-btn form-submit-btn">
-                  <Send size={16} /> Send Message
+                <button
+                  type="submit"
+                  className="btn solid-glow-btn form-submit-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="spinner" /> Sending Message...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} /> Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </div>
